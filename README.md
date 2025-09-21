@@ -1,7 +1,7 @@
 # MLOps_E2E_1st
 1st E2E Project
 Wine quality :- Dataset
-1. select best model using gridsearchCV.
+1. select best model using gridsearchCV.scaling..
 2.save the model.
 3. create a new python file load the model in it . and make the use of model using fastapi.
 later part :- ( 1st add MLflow then add DVC )
