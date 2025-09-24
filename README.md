@@ -16,6 +16,6 @@ Stage 2 :- make a separate config file to maintain values that can be changed .
 
 
 #Scaler
-joblib.dump(scaler, 'scaler.pkl')
-scaler = joblib.load('scaler.pkl')
-X_scaled = scaler.transform(X_new)  # Apply to new data
+-> joblib.dump(scaler, 'scaler.pkl')
+-> scaler = joblib.load('scaler.pkl')
+-> X_scaled = scaler.transform(X_new)  # Apply to new data
