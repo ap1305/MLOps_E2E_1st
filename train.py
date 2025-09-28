@@ -47,4 +47,20 @@ for i in range(0,len(models)):
 print(acc)
 best_model=models[acc.index(max(acc))]
 pred_new=best_model.predict(X_test)
-#accuracy=accuracy_score(y_test,pred_new)
+accuracy=accuracy_score(y_test,pred_new)
+# import os
+# os.environ["DAGSHUB_USERNAME"] = "ap1305"
+# os.environ["DAGSHUB_KEY"] = "adsadsadsa"
+import dagshub
+
+
+dagshub.init(repo_name='MLOps_E2E_1st',repo_owner='ap1305',mlflow=True)
+with mlflow.start_run():
+    mlflow.set_experiment("wineQualityCheck")
+    mlflow.set_tag("Author","Anish")
+    mlflow.log_metric("accuracy",accuracy)
+    mlflow.log_params(best_params)
+    model_name="best_model.pkl"
+    with open(model_name,"wb") as f:
+        pickle.dump(best_model,f)
+    mlflow.log_artifact(model_name,"best_model")
