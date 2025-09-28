@@ -28,7 +28,7 @@ joblib.dump(scaler,'scaler.pkl')
 #best model selection and model training 
 
 model_list=[RandomForestClassifier(),DecisionTreeClassifier()]
-best_model={}
+best_models={}
 params={
     #'n_estimators': [10,35,50,100],
     'max_depth': [None,5,10,20],
@@ -39,21 +39,24 @@ for model in model_list:
     gridsearch=GridSearchCV(model,params,cv=3,scoring='accuracy')
     gridsearch.fit(X_train,Y_train)
 #   print(model,gridsearch.best_params_)
-    model.set_params(**gridsearch.best_params_)
-    model.fit(X_train,Y_train)
-# we can use model.best_estimators_ as well, then we can remove the set_params and fit()
+    #model.set_params(**gridsearch.best_params_)
+    #model.fit(X_train,Y_train)
+    model=gridsearch.best_estimator_
+# we can use gridsearch.best_estimators_ as well, then we can remove the set_params and fit()
     Y_train_pred=model.predict(X_train)
     Y_test_pred=model.predict(X_test)
     Accuracy_train=accuracy_score(Y_train,Y_train_pred)
     Accuracy=accuracy_score(Y_test,Y_test_pred)
-    name=type(model).__name__
-    best_model[name]=Accuracy
+    best_models[model]=Accuracy
 
-    print(model_list)
-#print(best_model)
 
 #print(max(best_model.values()))
-#print(max(best_model,key=best_model.get))
+best_model=max(best_models,key=best_models.get)
+best_model_name=type(best_model).__name__
+
+joblib.dump(best_model,f'{best_model_name}.pkl')
+
+
     
     
 
