@@ -62,11 +62,11 @@ joblib.dump(best_model,f'{best_model_name}.pkl')
 dagshub.init(repo_name='MLOps_E2E_1st',repo_owner='ap1305',mlflow=True)
 
 y_pred=best_model.predict(X_test)
-expected_labels = list(range(3, 9))  # or whatever your full label set is
-report_dict = classification_report(Y_test, y_pred, output_dict=True, labels=expected_labels)
+#expected_labels = list(range(5, 9))  # or whatever your full label set is
+#report_dict = classification_report(Y_test, y_pred, output_dict=True, labels=expected_labels)
 #report_dict=classification_report(y_pred,Y_test,output_dict=True)
 #print(best_model.get_params())
-print(report_dict)
+#print(report_dict)
 mlflow.set_experiment("wineQualityCheck")
 metrics = {
     "Accuracy": accuracy_score(Y_test, y_pred),
@@ -79,12 +79,7 @@ print(metrics)
 with mlflow.start_run():
     mlflow.set_tag("author","Raghav")
     mlflow.log_params(best_model.get_params())
-    mlflow.log_metrics({
-        'accuracy': report_dict['accuracy'],
-        'recall_class_0': report_dict['0']['recall'],
-        'recall_class_1': report_dict['1']['recall'],
-        'f1_score_macro': report_dict['macro avg']['f1-score']
-    })
+    mlflow.log_metrics(metrics)
     file='RandomForestClassifier.pkl'
     mlflow.log_artifact('RandomForestClassifier.pkl',"wineQuality_raghav")
     
