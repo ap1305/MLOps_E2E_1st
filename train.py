@@ -4,8 +4,9 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.preprocessing import  StandardScaler
 from sklearn.model_selection import train_test_split,GridSearchCV
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score,precision_score,recall_score,f1_score,roc_auc_score
 import pickle
+import numpy as np
 #import joblib
 
 filename=r'C:\Users\ANUPMA\Desktop\Desktop\MLOps\WineQualityCheckFastApi\winequality-red.csv'
@@ -48,18 +49,34 @@ print(acc)
 best_model=models[acc.index(max(acc))]
 pred_new=best_model.predict(X_test)
 accuracy=accuracy_score(y_test,pred_new)
-# import os
-# os.environ["DAGSHUB_USERNAME"] = "ap1305"
-# os.environ["DAGSHUB_KEY"] = "adsadsadsa"
+metrics={
+    "Accuracy": accuracy
+#####Belows are only for binary classfications,here we have dataset (winequality-red.csv) has multi-class labels in quality (e.g., values like 3,4,5,6,7,8).
+    # "Precision": precision_score(y_test,pred_new),
+    # "Recall": recall_score(y_test,pred_new),
+    # "F1-Score": f1_score(y_test,pred_new),
+    # "ROC-AUC": roc_auc_score(y_test,pred_new)
+}
+import os
 import dagshub
+os.environ["DAGSHUB_USERNAME"] = "ap1305"
+os.environ["DAGSHUB_KEY"] = "00c665a88028b39a82053151d6d04df5ff7a902f"
 
 
+#dagshub.clear_token_cache()
+# After running the above line, your next DagsHub operation will re-authenticate your connection.
+
+# Now, your project will connect using the correct account [1].
+
+# from dagshub.auth import clear_token_cache
+# clear_token_cache() 
 dagshub.init(repo_name='MLOps_E2E_1st',repo_owner='ap1305',mlflow=True)
+mlflow.set_experiment("wineQualityCheck")
 with mlflow.start_run():
-    mlflow.set_experiment("wineQualityCheck")
     mlflow.set_tag("Author","Anish")
-    mlflow.log_metric("accuracy",accuracy)
-    mlflow.log_params(best_params)
+    mlflow.log_metric("accuracy",float(accuracy))
+    mlflow.log_metrics(metrics)
+    mlflow.log_params(params=best_params)
     model_name="best_model.pkl"
     with open(model_name,"wb") as f:
         pickle.dump(best_model,f)
