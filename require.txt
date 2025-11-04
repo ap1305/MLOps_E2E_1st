@@ -1,0 +1,9 @@
+dagshub
+mlflow==2.22.1
+scikit-learn
+pandas
+joblib
+fastapi
+pydantic
+uvicorn
+numpy

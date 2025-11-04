@@ -6,9 +6,6 @@ import mlflow
 from sklearn.model_selection import train_test_split,GridSearchCV
 import joblib
 from sklearn.metrics import accuracy_score
-import dagshub
-from sklearn.metrics import classification_report
-from sklearn.metrics import accuracy_score,precision_score,recall_score,f1_score,roc_auc_score
 
 
 file=r'/workspaces/MLOps_E2E_1st/winequality-red.csv'
@@ -60,32 +57,9 @@ best_model_name=type(best_model).__name__
 joblib.dump(best_model,f'{best_model_name}.pkl')
 
 
-dagshub.init(repo_name='MLOps_E2E_1st',repo_owner='ap1305',mlflow=True)
-
-y_pred=best_model.predict(X_test)
-#expected_labels = list(range(5, 9))  # or whatever your full label set is
-#report_dict = classification_report(Y_test, y_pred, output_dict=True, labels=expected_labels)
-#report_dict=classification_report(y_pred,Y_test,output_dict=True)
-#print(best_model.get_params())
-#print(report_dict)
-mlflow.set_experiment("wineQualityCheck")
-metrics = {
-    "Accuracy": accuracy_score(Y_test, y_pred),
-    "Precision": precision_score(Y_test, y_pred, average="macro"),  # or "weighted"
-    "Recall": recall_score(Y_test, y_pred, average="macro"),
-    "F1-Score": f1_score(Y_test, y_pred, average="macro"),
-}
-
-print(metrics)
-with mlflow.start_run():
-    mlflow.set_tag("author","Raghav")
-    mlflow.log_params(best_model.get_params())
-    mlflow.log_metrics(metrics)
-    file='RandomForestClassifier.pkl'
-    mlflow.log_artifact('RandomForestClassifier.pkl',"wineQuality_raghav")
+    
     
 
-bekar_model=mlflow.pyfunc.load_model("runs:/edf06d9bb69748a2920e5a0f07d5e011/09baf419dfde490eb1ac0593e8adb0e1/artifacts/best_model/best_model.pkl")
 
 
 
