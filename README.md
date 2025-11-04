@@ -4,7 +4,8 @@ Wine quality :- Dataset
 1. select best model using gridsearchCV.scaling..
 2.save the model.
 3. create a new python file load the model in it . and make the use of model using fastapi.
-later part :- ( 1st add MLflow then add DVC )
+later part :- ( 1st add MLflow then add DVC(at the later stage one we have the final output) )
+4. host it using fastapi.
 Use GitHub action :-
 Containerize it :- We will use deployment (k8s ) with 2 replicas.
 ## Monitoring
@@ -14,8 +15,15 @@ Stage 2 :- make a separate config file to maintain values that can be changed .
 
  week three :- Terraform
 
-
 #Scaler
 -> joblib.dump(scaler, 'scaler.pkl')
 -> scaler = joblib.load('scaler.pkl')
 -> X_scaled = scaler.transform(X_new)  # Apply to new data
+
+whylabs -> data drift calculator
+
+->> for monitoring :- add prometheus and grafana
+
+SSL
+Make it secure.
+
