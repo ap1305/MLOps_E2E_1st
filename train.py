@@ -9,7 +9,7 @@ import pickle
 import numpy as np
 #import joblib
 
-filename=r'C:\Users\ANUPMA\Desktop\Desktop\MLOps\WineQualityCheckFastApi\winequality-red.csv'
+filename=r'/workspaces/MLOps_E2E_1st/winequality-red.csv'
 df=pd.read_csv(filename)
 # print(df.head())
 features=df.columns
