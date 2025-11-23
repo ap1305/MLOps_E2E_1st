@@ -3,6 +3,7 @@ from pydantic import BaseModel
 import pickle
 import numpy as np
 import mlflow
+import uvicorn
 
 mlflow.set_tracking_uri("https://dagshub.com/ap1305/MLOps_E2E_1st.mlflow")
 
@@ -48,5 +49,4 @@ def predict(data: WineQualityInput):
 
 # 3. Start FastAPI server
 if __name__ == "__main__":
-    import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
