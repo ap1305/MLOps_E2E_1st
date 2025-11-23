@@ -41,7 +41,7 @@ class WineQualityInput(BaseModel):
     alcohol: float
 @app.post("/predict")
 def predict(data: WineQualityInput):
-    X= np.array([[data.fixed_acidity, data.volatile_acidity, data.citric_acid, data.residual_sugar, data.chlorides, data.free_sulfur_dioxide, data.total_sulfur_dioxide, data.density, data.pH, data.sulphates, data.alcohol]])
+    X_orig= np.array([[data.fixed_acidity, data.volatile_acidity, data.citric_acid, data.residual_sugar, data.chlorides, data.free_sulfur_dioxide, data.total_sulfur_dioxide, data.density, data.pH, data.sulphates, data.alcohol]])
 #    X_orig= [[data.fixed_acidity, data.volatile_acidity, data.citric_acid, data.residual_sugar, data.chlorides, data.free_sulfur_dioxide, data.total_sulfur_dioxide, data.density, data.pH, data.sulphates, data.alcohol ]]
     X=scaler.transform(X_orig)
     pred=model.predict(X)[0]
