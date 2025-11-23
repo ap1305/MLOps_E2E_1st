@@ -25,6 +25,7 @@ X_test=scaler.transform(X_test)
 #joblib.dump(scaler, 'scaler.pkl')
 with open ( "scaler.pkl", 'wb') as f:
     pickle.dump(scaler,f)
+scaler_file="scaler.pkl"
 models=[RandomForestClassifier(), DecisionTreeClassifier()]
 params=[ {
         'n_estimators' : [1, 10, 20, 100],
@@ -81,3 +82,4 @@ with mlflow.start_run():
     with open(model_name,"wb") as f:
         pickle.dump(best_model,f)
     mlflow.log_artifact(model_name,"best_model")
+    mlflow.log_artifact(scaler_file,"scaler_file")

@@ -3,3 +3,6 @@ mlflow==2.22.1
 scikit-learn
 numpy
 dagshub
+fastapi
+pydantic
+uvicorn
