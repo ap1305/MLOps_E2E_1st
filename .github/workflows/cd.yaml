@@ -20,4 +20,4 @@ jobs:
             docker pull ${{ vars.DOCKERHUB_USERNAME}}/winequality1:v1
             docker stop winequality-api || true
             docker rm winequality-api || true
-            docker run -d --name winequality-api -p 80:8000 ${{ secrets.DOCKER_USERNAME }}/winequality1:latest
+            docker run -d --name winequality1 -p 80:8000 ${{ secrets.DOCKER_USERNAME }}/winequality1:latest
