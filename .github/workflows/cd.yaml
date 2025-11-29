@@ -15,7 +15,7 @@ jobs:
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
-          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          key: ${{ secrets.EC2PRIVATEKEY }}
           script: |
             docker pull ${{ secrets.DOCKER_USERNAME }}/winequality1:latest
             docker stop winequality-api || true
