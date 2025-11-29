@@ -1,0 +1,23 @@
+name: CD
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy Docker container on EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ec2-user
+          key: ${{ secrets.EC2_PRIVATE_KEY }}
+          script: |
+            docker pull ${{ secrets.DOCKER_USERNAME }}/winequality1:latest
+            docker stop winequality-api || true
+            docker rm winequality-api || true
+            docker run -d --name winequality-api -p 80:8000 ${{ secrets.DOCKER_USERNAME }}/winequality1:latest
