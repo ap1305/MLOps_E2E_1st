@@ -20,8 +20,8 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_TOKEN}}
 
       - name: Build Docker image
-        run: docker build -t ${{ vars.DOCKERHUB_USERNAME}}/winequality1:latest .
+        run: docker build -t ${{ vars.DOCKERHUB_USERNAME}}/winequality1:v1 .
 
       - name: Push Docker image to Docker Hub
-        run: docker push ${{ vars.DOCKERHUB_USERNAME}}/winequality1:latest
+        run: docker push ${{ vars.DOCKERHUB_USERNAME}}/winequality1:v1
 
