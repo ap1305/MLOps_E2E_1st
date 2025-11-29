@@ -18,6 +18,4 @@ jobs:
           key: ${{ secrets.EC2PRIVATEKEY }}
           script: |
             docker pull ${{ vars.DOCKERHUB_USERNAME}}/winequality1:v1
-            docker stop winequality1 || true
-            docker rm winequality1 || true
-            docker run -d --name winequality1:v1 -p 80:8000 ${{ vars.DOCKERHUB_USERNAME }}/winequality1:v1
+            docker run -d --name winequality1 -p 80:8000 ${{ vars.DOCKERHUB_USERNAME }}/winequality1:v1
