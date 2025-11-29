@@ -17,7 +17,7 @@ jobs:
           username: ec2-user
           key: ${{ secrets.EC2PRIVATEKEY }}
           script: |
-            docker pull ${{ secrets.DOCKER_USERNAME }}/winequality1:latest
+            docker pull ${{ vars.DOCKERHUB_USERNAME}}/winequality1:v1
             docker stop winequality-api || true
             docker rm winequality-api || true
             docker run -d --name winequality-api -p 80:8000 ${{ secrets.DOCKER_USERNAME }}/winequality1:latest
