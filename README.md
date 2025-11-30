@@ -37,3 +37,8 @@ sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
 
 3.git:-
 sudo yum install git
+
+
+
+requirement on VM :-
+clone the repo for once ( 1st time only ) inside app folder as per mentioned in CD Pipeline
