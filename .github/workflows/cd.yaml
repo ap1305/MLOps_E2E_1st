@@ -3,19 +3,30 @@ name: CD
 on:
   workflow_run:
     workflows: ["CI"]
-    types:
-      - completed
+    types: [completed]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Deploy Docker container on EC2
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Deploy to EC2
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ec2-user
           key: ${{ secrets.EC2PRIVATEKEY }}
           script: |
-            docker pull ${{ vars.DOCKERHUB_USERNAME}}/winequality1:v1
-            docker run -d --name winequality1 -p 80:8000 ${{ vars.DOCKERHUB_USERNAME }}/winequality1:v1
+            cd /home/ec2-user/app
+
+            # Pull latest git repo
+            git pull
+
+            # Pull latest ML image
+            docker compose pull
+
+            # Restart containers
+            docker compose up -d --force-recreate
