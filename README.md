@@ -22,15 +22,18 @@ Stage 2 :- make a separate config file to maintain values that can be changed .
 
 
 thrid parties neeed on ec2:-
-docker
-docker compose
-
+1. docker
+2.docker compose
+3. git
 How to install third parties:-
-docker installtion :- 
+1. docker installtion :- 
 sudo yum install docker
 
-docker compose installation:-
+2. docker compose installation:-
 sudo mkdir -p /usr/local/lib/docker/cli-plugins
 sudo curl -SL https://github.com/docker/compose/releases/download/v2.29.2/docker-compose-linux-x86_64 \
     -o /usr/local/lib/docker/cli-plugins/docker-compose
 sudo chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
+
+3.git:-
+sudo yum install git
