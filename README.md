@@ -11,6 +11,19 @@ Containerize it :- We will use deployment (k8s ) with 2 replicas.
 ####when Everything will be done :- then same model we will deploy using streamlit and flask
 Stage 2 :- make a separate config file to maintain values that can be changed .
 
+Data drift handling
+[Production Data] 
+      ↓
+[Drift Detection Script / Metric Exporter] 
+      ↓
+[Prometheus scrapes drift metrics] 
+      ↓
+[Grafana dashboards + alerts] 
+      ↓
+[GitHub Actions CI/CD triggered if drift exceeds threshold] 
+      ↓
+[Auto retrain → Build Docker image → Deploy to EC2]
+
 
  week three :- Terraform
 
