@@ -7,6 +7,18 @@ services:
     ports:
       - "8000:8000"
 
+  drift-exporter:
+    build: .
+    container_name: drift_exporter
+    command: python drift_exporter.py
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./prod_data.csv:/app/prod_data.csv
+      - ./winequality-red.csv:/app/winequality-red.csv
+    depends_on:
+      - ml-app
+
   prometheus:
     image: prom/prometheus
     container_name: prometheus
@@ -16,6 +28,7 @@ services:
       - "9090:9090"
     depends_on:
       - ml-app
+      - drift-exporter
 
   grafana:
     image: grafana/grafana
