@@ -1,0 +1,15 @@
+# Dockerfile.drift
+FROM python:3.10-slim
+
+WORKDIR /app
+
+COPY . .
+
+# Install only required packages for drift monitoring
+RUN pip install --no-cache-dir evidently==0.6.4 pandas prometheus_client sniffio
+
+# Expose Prometheus metrics port
+EXPOSE 8001
+
+# Run the drift exporter script
+ENTRYPOINT ["python", "drift_exporter.py"]

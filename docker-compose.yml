@@ -8,9 +8,10 @@ services:
       - "8000:8000"
 
   drift-exporter:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.drift
     container_name: drift_exporter
-    command: python drift_exporter.py
     ports:
       - "8001:8001"
     volumes:
