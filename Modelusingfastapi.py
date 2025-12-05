@@ -6,8 +6,16 @@ import mlflow
 import uvicorn
 import csv
 from pathlib import Path
+from threading import Thread
+import time
+import pandas as pd
+from evidently.report import Report
+from evidently.metrics import DataDriftPreset
+from prometheus_client import start_http_server, Gauge
 
+# -------------------------------
 # MLflow setup
+# -------------------------------
 mlflow.set_tracking_uri("https://dagshub.com/ap1305/MLOps_E2E_1st.mlflow")
 
 # Load model
@@ -24,7 +32,9 @@ scaler_local_path = mlflow.artifacts.download_artifacts(
 with open(scaler_local_path, "rb") as f:
     scaler = pickle.load(f)
 
+# -------------------------------
 # FastAPI app
+# -------------------------------
 app = FastAPI()
 
 # Input Schema
@@ -51,6 +61,42 @@ if not prod_file.exists():
             "free_sulfur_dioxide","total_sulfur_dioxide","density","pH","sulphates","alcohol"
         ])
 
+# -------------------------------
+# Drift monitoring setup
+# -------------------------------
+# Load reference (training) data
+train_df = pd.read_csv("winequality-red.csv")
+
+# Prometheus metric
+drift_metric = Gauge("data_drift_detected", "1 if data drift detected else 0")
+
+def drift_monitor():
+    """Background thread to compute data drift every hour"""
+    # Expose metrics on port 8001
+    start_http_server(8001)
+    print("Drift exporter running on port 8001...")
+    
+    while True:
+        try:
+            if prod_file.exists() and prod_file.stat().st_size > 0:
+                prod_df = pd.read_csv(prod_file)
+                report = Report(metrics=[DataDriftPreset()])
+                report.run(reference_data=train_df, current_data=prod_df)
+                result = report.as_dict()
+                # Check if any feature drifted
+                any_drift = any([f["drift_detected"] for f in result["metrics"][0]["result"]["metrics"]])
+                drift_metric.set(1 if any_drift else 0)
+                print("Drift detected:", any_drift)
+        except Exception as e:
+            print("Error checking drift:", e)
+        time.sleep(3600)  # Run every hour
+
+# Start drift monitoring in background thread
+Thread(target=drift_monitor, daemon=True).start()
+
+# -------------------------------
+# Prediction endpoint
+# -------------------------------
 @app.post("/predict")
 def predict(data: WineQualityInput):
     X_orig = [
@@ -69,5 +115,8 @@ def predict(data: WineQualityInput):
     
     return {"predicted_class": int(pred)}
 
+# -------------------------------
+# Run FastAPI app
+# -------------------------------
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
