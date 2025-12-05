@@ -5,8 +5,9 @@ WORKDIR /app
 
 COPY . .
 
-# Install only required packages for drift monitoring
-RUN pip install --no-cache-dir evidently==0.6.4 pandas prometheus_client sniffio
+# Upgrade pip to a stable version and install required packages with exact versions
+RUN pip install --upgrade pip==23.0.1
+RUN pip install --no-cache-dir evidently==0.6.4 pandas==2.3.3 prometheus_client==0.23.1 sniffio==1.3.1
 
 # Expose Prometheus metrics port
 EXPOSE 8001
