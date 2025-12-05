@@ -6,4 +6,4 @@ dagshub
 fastapi
 pydantic
 uvicorn
-evidently==0.6.4
+evidently==0.4.9
