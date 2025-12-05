@@ -11,7 +11,7 @@ COPY . .
 RUN pip install --upgrade pip
 RUN pip cache purge || true
 RUN pip install --force-reinstall --no-cache-dir \
-    evidently==0.4.9 pandas prometheus_client sniffio
+    evidently pandas prometheus_client sniffio
 
 EXPOSE 8001
 
