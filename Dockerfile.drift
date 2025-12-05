@@ -15,7 +15,7 @@ COPY . .
 
 # Install Python dependency versions matching your script
 RUN pip install --upgrade pip
-RUN pip install evidently==0.6.4 pandas prometheus_client sniffio
+RUN pip install evidently==evidently==0.4.9 pandas prometheus_client sniffio
 
 # Expose metrics port
 EXPOSE 8001
