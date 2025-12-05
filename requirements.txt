@@ -6,3 +6,5 @@ dagshub
 fastapi
 pydantic
 uvicorn
+evidently
+prometheus_client

@@ -7,18 +7,24 @@ services:
     ports:
       - "8000:8000"
 
+
   drift-exporter:
     build:
       context: .
       dockerfile: Dockerfile.drift
     container_name: drift_exporter
+<<<<<<< HEAD
+=======
+    entrypoint: >
+      sh -c "pip install --upgrade pip && pip install evidently pandas prometheus_client sniffio && python drift_exporter.py"
+>>>>>>> b4fce2779f28565a758a53e72ace358570ed815f
     ports:
       - "8001:8001"
     volumes:
-      - ./prod_data.csv:/app/prod_data.csv
-      - ./winequality-red.csv:/app/winequality-red.csv
+      - .:/app
     depends_on:
       - ml-app
+
 
   prometheus:
     image: prom/prometheus
