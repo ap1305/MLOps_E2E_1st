@@ -8,14 +8,14 @@ services:
       - "8000:8000"
 
   drift-exporter:
-    build: .
+    image: ${DOCKERHUB_USERNAME}/winequality1:v1
     container_name: drift_exporter
-    entrypoint: ["python", "drift_exporter.py"]
+    entrypoint: >
+      sh -c "pip install evidently pandas prometheus_client && python drift_exporter.py"
     ports:
       - "8001:8001"
     volumes:
-      - ./prod_data.csv:/app/prod_data.csv
-      - ./winequality-red.csv:/app/winequality-red.csv
+      - .:/app
     depends_on:
       - ml-app
 
