@@ -7,7 +7,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./prod_data.csv:/app/prod_data.csv
+      - shared_data:/app
 
   drift-exporter:
     image: ${DOCKERHUB_USERNAME}/driftdetectionevidently:1
@@ -15,7 +15,7 @@ services:
     ports:
       - "8001:8001"
     volumes:
-      - ./prod_data.csv:/app/prod_data.csv
+      - shared_data:/app
       - ./winequality-red.csv:/app/winequality-red.csv
     depends_on:
       - ml-app
@@ -40,3 +40,5 @@ services:
       - "3000:3000"
     depends_on:
       - prometheus
+volumes:
+  shared_data:
