@@ -28,7 +28,7 @@ services:
       - "9090:9090"
     depends_on:
       - ml-app
-    #  - drift-exporter
+
 
   grafana:
     image: grafana/grafana
