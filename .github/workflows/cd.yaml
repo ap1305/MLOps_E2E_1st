@@ -25,7 +25,7 @@ jobs:
             cd /home/ec2-user/app/MLOps_E2E_1st
 
             # Pull latest git repo
-            git pull
+            git clone https://github.com/ap1305/MLOps_E2E_1st.git
 
             # Pull latest ML image
             docker compose pull
