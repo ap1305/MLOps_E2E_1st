@@ -1,43 +1,46 @@
 import pandas as pd
-from evidently.model_monitoring import DataDriftMonitor
-from evidently.model_monitoring.monitoring import Dataset
+from evidently.presets import DataDriftPreset
 from prometheus_client import start_http_server, Gauge
 import time
+import os
 
-# Load training data
-train_df = pd.read_csv("winequality-red.csv")  # Replace with your training CSV path
+TRAIN_DATA_PATH = "/app/winequality-red.csv"
+PROD_DATA_PATH = "/app/prod_data.csv"
 
-# Prometheus metric
-drift_metric = Gauge("data_drift_detected", "1 if data drift detected else 0")
+if not os.path.exists(TRAIN_DATA_PATH):
+    print("Training data not found:", TRAIN_DATA_PATH)
+    exit(1)
+train_df = pd.read_csv(TRAIN_DATA_PATH)
 
-# Setup Evidently drift monitor
-monitor = DataDriftMonitor()
+drift_metric = Gauge("data_drift_detected", "1 if any drift detected else 0")
 
 def check_drift():
-    try:
-        prod_df = pd.read_csv("prod_data.csv")  # Production logs
+    if not os.path.exists(PROD_DATA_PATH):
+        print("Production data missing:", PROD_DATA_PATH)
+        drift_metric.set(0)
+        return
 
-        # Wrap reference and current data
-        reference_data = Dataset(train_df)
-        current_data = Dataset(prod_df)
+    prod_df = pd.read_csv(PROD_DATA_PATH)
 
-        # Calculate drift
-        result = monitor.calculate(reference_data, current_data)
+    # Initialize preset
+    preset = DataDriftPreset()
+    # Run drift calculation
+    preset.calculate(train_df, prod_df)
 
-        # Check if any feature drifted
-        drift_metrics = result.metrics
-        any_drift = any([feature["drift_detected"] for feature in drift_metrics["data_drift"]["metrics"]])
-        
-        # Set Prometheus metric
-        drift_metric.set(1 if any_drift else 0)
-        print("Drift detected:", any_drift)
+    # preset.result() contains a dictionary with results
+    result = preset.result()
+    # result['metrics'] contains all drift info
+    metrics = result['metrics']
 
-    except Exception as e:
-        print("Error checking drift:", e)
+    # Detect if any column drifted
+    any_drift = any(metric['result']['drift_detected'] for metric in metrics)
+    drift_metric.set(1 if any_drift else 0)
+    print("Drift detected:", any_drift)
 
 if __name__ == "__main__":
-    start_http_server(8001)  # Expose Prometheus metrics
+    start_http_server(8001)
     print("Drift exporter running on port 8001...")
+
     while True:
         check_drift()
-        time.sleep(3600)  # Run every hour
+        time.sleep(60)
