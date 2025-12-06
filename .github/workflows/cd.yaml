@@ -20,6 +20,7 @@ jobs:
           username: ec2-user
           key: ${{ secrets.EC2PRIVATEKEY }}
           script: |
+            mkdir /home/ec2-user/app/MLOps_E2E_1st
             cd /home/ec2-user/app/MLOps_E2E_1st
 
             # Pull latest git repo
