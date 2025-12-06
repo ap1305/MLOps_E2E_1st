@@ -20,13 +20,13 @@ jobs:
           username: ec2-user
           key: ${{ secrets.EC2PRIVATEKEY }}
           script: |
-            rm -rf /home/ec2-user/app/MLOps_E2E_1st
-            mkdir /home/ec2-user/app/MLOps_E2E_1st
-            cd /home/ec2-user/app/MLOps_E2E_1st
+            rm -rf /home/ec2-user/app/
+            mkdir /home/ec2-user/app/
+            cd /home/ec2-user/app/
 
             # Pull latest git repo
             git clone https://github.com/ap1305/MLOps_E2E_1st.git
-
+            cd ./MLOps_E2E_1st.git
             # Pull latest ML image
             docker compose pull
 
