@@ -7,16 +7,16 @@ services:
     ports:
       - "8000:8000"
 
-  drift-exporter:
-    image: ${DOCKERHUB_USERNAME}/driftdetectionevidently:1
-    container_name: drift_exporter
-    ports:
-      - "8001:8001"
-    volumes:
-      - ./prod_data.csv:/app/prod_data.csv
-      - ./winequality-red.csv:/app/winequality-red.csv
-    depends_on:
-      - ml-app
+  #drift-exporter:
+  #  image: ${DOCKERHUB_USERNAME}/driftdetectionevidently:1
+  #  container_name: drift_exporter
+  #  ports:
+  #    - "8001:8001"
+  #  volumes:
+  #    - ./prod_data.csv:/app/prod_data.csv
+  #    - ./winequality-red.csv:/app/winequality-red.csv
+  #  depends_on:
+  #    - ml-app
 
 
   prometheus:
@@ -28,7 +28,7 @@ services:
       - "9090:9090"
     depends_on:
       - ml-app
-      - drift-exporter
+    #  - drift-exporter
 
   grafana:
     image: grafana/grafana
