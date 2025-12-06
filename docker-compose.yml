@@ -7,11 +7,8 @@ services:
     ports:
       - "8000:8000"
 
-
   drift-exporter:
-    build:
-      context: .
-      dockerfile: Dockerfile.drift
+    image: ${DOCKERHUB_USERNAME}/driftdetectionevidently:1
     container_name: drift_exporter
     ports:
       - "8001:8001"
