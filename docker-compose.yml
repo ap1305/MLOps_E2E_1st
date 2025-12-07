@@ -10,7 +10,7 @@ services:
       - shared_data:/app
 
   drift-exporter:
-    image: ${DOCKERHUB_USERNAME}/driftdetectionevidently:2
+    image: ${DOCKERHUB_USERNAME}/drfitexportereveidently:2
     container_name: drift_exporter
     ports:
       - "8001:8001"
